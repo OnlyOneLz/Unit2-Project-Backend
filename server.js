@@ -31,7 +31,15 @@ const reviewSchema = new mongoose.Schema({
   product: {
     type: String,
     required: true
-  }
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: String,
+  },
+  date: String
 },{
   timestamps: true
 });
@@ -105,32 +113,14 @@ app.get('/Collection', async (req, res) => {
 });
 app.get('/Product/:id/Review', async (req, res) => {
   const id = req.params.id
-  console.log('REVIEWS');
   try {
     const reviews = await Review.find({product: id});
-    console.log(reviews);
     res.json(reviews);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-// app.get('/Home', async (req, res) => {
-//   try {
-//     const product = await Product.findById({_id: '652663ccf856f0929ce2217e'});
-//     const productTwo = await Product.findById({_id: '6526640af856f0929ce22181'});
-//     const productThree = await Product.findById({_id: '65266420f856f0929ce22184'});
-//     const productFour = await Product.findById({_id: '65266439f856f0929ce22187'});
-//     res.json(product);
-//     res.json(productTwo);
-//     res.json(productThree);
-//     res.json(productFour);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 app.post("/AddProduct", async (req, res) => {
   try {
@@ -157,11 +147,15 @@ app.post("/Product/:id/AddReview", async (req, res) => {
   try {
     const data = req.body;
     const productId = req.params.id
+    console.log(data.date);
     const review = new Review({
       userEmail: data.email,
       rating: parseInt(data.rating),
       text: data.text,
-      product: productId
+      product: productId,
+      name: data.name,
+      image: data.image,
+      date: data.date
       
     })
       await review.save();
@@ -182,6 +176,7 @@ app.post("/AddToBasket", async (req, res) => {
     let basket = await Basket.findOne({ _id: user.items });
     basket.items.push(product)
     await basket.save()
+    res.json(basket)
   }
   catch (err) {
     console.log("ERROR MESSAGE HERE ->", err.message);
@@ -220,6 +215,8 @@ app.delete('/Product', async (req, res) => {
     )
     basket.items.splice((item), 1);
     await basket.save()
+    console.log(basket);
+    res.json(basket)
   } catch (error) {
     console.log(error)
     res.sendStatus(500)
@@ -283,23 +280,12 @@ app.get('/Product/user/:email', async (req, res) => {
 
 app.post('/EditProduct/:id', async (req, res) => {
   try {
-    console.log(req.body);
     Product.updateOne({ "_id": req.params.id }, {
       name: req.body.name,
       description: req.body.description,
       price: parseFloat(req.body.price),
       image: req.body.image
     })
-      // const product = await Basket.items.findOne({_id: req.body.id})
-      // const user = await User.findOne({userEmail: req.body.email});
-      // Basket.updateOne({_id: user.items}, {
-      //   items: {
-      //     product {
-      //       price: req.body.price
-      //     }
-          
-      //   } 
-      // })
       .then(() => {
         res.sendStatus(200)
       })
@@ -326,20 +312,20 @@ app.post('/EditProduct/:id', async (req, res) => {
     }
   })
 
-  app.post("/addReview", async (req, res) => {
-    try {
-      const data = req.body;
-      const review = new Review({
-        name: data.name,
-        date: data.date,
-        rating: data.rating,
-        text: data.text,
-      });
-      await review.save();
-      return res.status(200).json(review);
-    } catch (err) {
-      console.log("ERROR MESSAGE HERE ->", err.message);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
+  // app.post("/addReview", async (req, res) => {
+  //   try {
+  //     const data = req.body;
+  //     const review = new Review({
+  //       name: data.name,
+  //       date: data.date,
+  //       rating: data.rating,
+  //       text: data.text,
+  //     });
+  //     await review.save();
+  //     return res.status(200).json(review);
+  //   } catch (err) {
+  //     console.log("ERROR MESSAGE HERE ->", err.message);
+  //     res.status(500).json({ error: "Internal Server Error" });
+  //   }
+  // });
 
