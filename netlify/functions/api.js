@@ -8,7 +8,7 @@ import serverless from "serverless-http";
 
 const app = express();
 
-app.use("/app/", router);
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser())
@@ -315,4 +315,5 @@ router.get('/Basket/:email', async (req, res) => {
       }
     })
     
+    app.use("/app/", router);
     export const handler = serverless(api);
