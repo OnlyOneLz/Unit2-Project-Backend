@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import "dotenv/config";
-import express, { Router }from "express";
+import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -9,9 +9,6 @@ import serverless from "serverless-http";
 
 
 const app = express();
-
-const router = Router();
-router.get("/hello", (req, res) => res.send("Hello World!"));
 
 app.use("/app/", router);
 app.use(cors());
