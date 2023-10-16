@@ -3,8 +3,6 @@
   node_bundler = "esbuild"
 [[redirects]]
   force = true
-  from = "/*"
+  from = "/app/*"
   status = 200
-  to = "/server.js"
-  [build]
-  functions = "netlify/functions" # Path to your Netlify Functions directory
+  to = "/.netlify/"
