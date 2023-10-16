@@ -18,12 +18,6 @@ mongoose.connect(process.env.DATABASE_FITNESSFIEN);
 const router = Router();
 router.get("/hello", (req, res) => res.send("Hello World!"));
 
-
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`listening on port: ${port}`);
-});
-
 const reviewSchema = new mongoose.Schema({
   userEmail: {
     type: String,
