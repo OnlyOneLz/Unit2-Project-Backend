@@ -1,18 +1,24 @@
 import mongoose from "mongoose";
 import "dotenv/config";
-import express from "express";
+import express, { Router }from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import serverless from "serverless-http";
 
 
 
 const app = express();
 
+const router = Router();
+router.get("/hello", (req, res) => res.send("Hello World!"));
+
+app.use("/app/", router);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser())
 
+export const handler = serverless(app);
 
 mongoose.connect(process.env.DATABASE_FITNESSFIEN);
 
